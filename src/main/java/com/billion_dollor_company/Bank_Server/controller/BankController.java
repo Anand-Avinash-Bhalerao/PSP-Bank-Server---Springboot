@@ -1,6 +1,7 @@
 package com.billion_dollor_company.Bank_Server.controller;
 
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.billion_dollor_company.Bank_Server.util.Constants;
 import com.billion_dollor_company.Bank_Server.util.Helper;
 import com.billion_dollor_company.Bank_Server.util.cryptography.DecryptionManager;
@@ -50,4 +51,40 @@ public class BankController {
         }
         return Helper.mapToXML(responseMap, "response");
     }
+
+    @PostMapping("/checkbalance")
+    public String checkBalance(@RequestBody String xmlRequest) {
+
+        String[] toExtractArr = {Constants.TransactionRequest.AMOUNT, Constants.TransactionRequest.ENCRYPTED_STRING, Constants.TransactionRequest.BANK_NAME, Constants.TransactionRequest.PAYER_ID, Constants.TransactionRequest.PAYEE_ID};
+
+        // in this requestMap, we extract all the tags from the request xml.
+        HashMap<String, String> requestMap = Helper.xmlToMap(xmlRequest, toExtractArr);
+        String bankName = requestMap.get(Constants.CheckBalanceRequest.BANK_NAME);
+        String payerID = requestMap.get(Constants.CheckBalanceRequest.PAYER_ID);
+
+
+        // This is the message sent from NPCI. Encrypted part is the password.
+        String encryptedMessage = requestMap.get(Constants.CheckBalanceRequest.ENCRYPTED_STRING);
+
+        // in this responseMap, we store all the tags needed in for the response xml. Used in the very end.
+        HashMap<String, String> responseMap = new HashMap<>();
+
+        try {
+            DecryptionManager manager = new DecryptionManager(Constants.Keys.BANK_PRIVATE_KEY, "Bank decryption Key");
+            String decryptedPassword = manager.getDecryptedMessage(encryptedMessage);
+            System.out.println("The decrypted string is " + decryptedPassword);
+            String userPassword = Helper.getUserPassword(requestMap.get(Constants.CheckBalanceRequest.PAYER_ID));
+            String userBalance = Helper.getBalance(requestMap.get(Constants.CheckBalanceRequest.PAYER_ID));
+
+            System.out.println("Balance is : "+ userBalance);
+            boolean isSame = decryptedPassword.equals(userPassword);
+            responseMap.put("status", isSame ? "success" : "failed");
+            responseMap.put("balance", userBalance);
+            System.out.println("Bank response after checking balance "+responseMap);
+        } catch (Exception e) {
+            responseMap.put("status", "failed");
+        }
+        return Helper.mapToXML(responseMap, "response");
+    }
+
 }

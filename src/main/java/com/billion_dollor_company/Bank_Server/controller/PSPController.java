@@ -54,4 +54,40 @@ public class PSPController {
         JSONObject json = new JSONObject(map);
         return json.toString();
     }
+
+    @RequestMapping("/checkbalance")
+    public String forwardAhead2(@RequestBody String request) {
+        System.out.println("The req in json is \n" + request+"\n\n");
+
+        String reqInXML = Helper.jsonToXml(request);
+        System.out.println("The req forwarded ahead in xml is \n" + reqInXML+"\n\n");
+        // todo: we need to add signature checking here.
+
+        // send the request forward. It will now send the request to NPCI.
+        String npciServerUrl = Constants.Servers.NPCI_Server.getCheckBalanceURL();
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(npciServerUrl, reqInXML, String.class);
+
+        // we need to send the response back to the app. the response needs to be in json.
+        // map to store the response and then this map is converted into json.
+        Map<String, String> map = new HashMap<>();
+
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+
+            // this response is in xml. status need to be extracted.
+            String responseXML = responseEntity.getBody();
+            System.out.println("Response in PSP "+responseEntity);
+             String response = Helper.extractFromXML(responseXML, "status");
+            String balance = Helper.extractFromXML(responseXML, "balance");
+        if (response == null) response = "failed";
+        map.put("status", response);
+        map.put("balance", balance);
+    }else {
+            map.put("status", "failed");
+        }
+
+        System.out.println("PSP response received from bank "+map);
+        JSONObject json = new JSONObject(map);
+        return json.toString();
+    }
+
 }

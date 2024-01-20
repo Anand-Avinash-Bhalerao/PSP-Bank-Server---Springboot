@@ -11,3 +11,23 @@ public class RequestInfo {
         this.encryptedString = encryptedString;
     }
 }
+
+class BankResponseCheckBalance {
+    private String status;
+    private String balance;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getBalance() {
+        return balance;
+    }
+
+    public void setBalance(String balance) {
+        this.balance = balance;
+    }
+}

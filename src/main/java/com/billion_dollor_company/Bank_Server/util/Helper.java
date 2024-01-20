@@ -116,4 +116,8 @@ public class Helper {
     public static String getUserPassword(String userID) {
         return "123456";
     }
+
+    public static String getBalance(String userID) {
+        return "9999";
+    }
 }
