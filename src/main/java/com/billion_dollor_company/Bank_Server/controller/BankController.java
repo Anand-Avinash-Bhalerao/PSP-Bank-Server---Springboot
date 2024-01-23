@@ -17,7 +17,7 @@ public class BankController {
 
     private String getUserPassword(String asda){
         return "123456";
-    }
+    } //comment
 
     @PostMapping("/transaction")
     public String initiateTransaction(@RequestBody String xmlRequest) {
