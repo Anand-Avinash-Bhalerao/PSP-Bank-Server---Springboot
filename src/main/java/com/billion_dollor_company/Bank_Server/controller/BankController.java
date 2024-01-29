@@ -1,53 +1,94 @@
 package com.billion_dollor_company.Bank_Server.controller;
 
 
+import com.billion_dollor_company.Bank_Server.models.AccountInfo;
+import com.billion_dollor_company.Bank_Server.models.ResponseStatusInfo;
+import com.billion_dollor_company.Bank_Server.models.TransactionRequest;
+import com.billion_dollor_company.Bank_Server.service.AccountDetailsService;
 import com.billion_dollor_company.Bank_Server.util.Constants;
 import com.billion_dollor_company.Bank_Server.util.Helper;
 import com.billion_dollor_company.Bank_Server.util.cryptography.DecryptionManager;
+import com.billion_dollor_company.Bank_Server.util.helpers.HelperXML;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/bank")
 public class BankController {
 
-    private String getUserPassword(String asda){
-        return "123456";
-    }
+    @Autowired
+    private AccountDetailsService accountDetailsService;
 
     @PostMapping("/transaction")
-    public String initiateTransaction(@RequestBody String xmlRequest) {
+    public ResponseEntity<String> initiateTransaction(@RequestBody String reqFromNPCI) {
+        System.out.println("\n______________________________________AT BANK SERVER______________________________________\n");
+        System.out.println("The XML request sent from NPCI to Bank Server is:\n" + Helper.getPrettyXML(reqFromNPCI, TransactionRequest.class) + "\n");
 
-        String[] toExtractArr = {Constants.TransactionRequest.AMOUNT, Constants.TransactionRequest.ENCRYPTED_STRING, Constants.TransactionRequest.BANK_NAME, Constants.TransactionRequest.PAYER_ID, Constants.TransactionRequest.PAYEE_ID};
-
-        // in this requestMap, we extract all the tags from the request xml.
-        HashMap<String, String> requestMap = Helper.xmlToMap(xmlRequest, toExtractArr);
-        String bankName = requestMap.get(Constants.TransactionRequest.BANK_NAME);
-        String payerID = requestMap.get(Constants.TransactionRequest.PAYER_ID);
-        String payeeID = requestMap.get(Constants.TransactionRequest.PAYEE_ID);
-        String amount = requestMap.get(Constants.TransactionRequest.AMOUNT);
-
-        // This is the message sent from NPCI. Encrypted part is the password.
-        String encryptedMessage = requestMap.get(Constants.TransactionRequest.ENCRYPTED_STRING);
-
-        // in this responseMap, we store all the tags needed in for the response xml. Used in the very end.
-        HashMap<String, String> responseMap = new HashMap<>();
+        XmlMapper xmlMapper = new XmlMapper();
+        TransactionRequest transactionInfo = null;
+        ResponseStatusInfo responseForNPCIObj = new ResponseStatusInfo();
 
         try {
-            DecryptionManager manager = new DecryptionManager(Constants.Keys.BANK_PRIVATE_KEY, "Bank decryption Key");
-            String decryptedPassword = manager.getDecryptedMessage(encryptedMessage);
-            System.out.println("The decrypted string is " + decryptedPassword);
-            String userPassword = Helper.getUserPassword(responseMap.get(Constants.TransactionRequest.PAYER_ID));
-
-            boolean isSame = decryptedPassword.equals(userPassword);
-            responseMap.put("status", isSame ? "success" : "failed");
+            transactionInfo = xmlMapper.readValue(reqFromNPCI, TransactionRequest.class);
         } catch (Exception e) {
-            responseMap.put("status", "failed");
+            System.out.println("An error occurred while converting request from XML");
+            e.printStackTrace();
+
+            responseForNPCIObj.setStatus(Constants.Values.ERROR_WHILE_CONVERSION);
+            String errorResponseForNPCIBody = "";
+            try {
+                errorResponseForNPCIBody = xmlMapper.writeValueAsString(responseForNPCIObj);
+            } catch (Exception ignored) {
+            }
+
+            ResponseEntity<String> errorResponse = new ResponseEntity<>(errorResponseForNPCIBody, HttpStatus.BAD_REQUEST);
+            return errorResponse;
         }
-        return Helper.mapToXML(responseMap, "response");
+
+        // now we have to decrypt the password using the bank's private key.
+        String responseForNPCIStr;
+        HttpStatus responseForNPCIStatus = HttpStatus.OK;
+        try {
+
+            DecryptionManager manager = new DecryptionManager(Constants.Keys.BANK_PRIVATE_KEY, "Bank decryption Key");
+            String decryptedPassword = manager.getDecryptedMessage(transactionInfo.getEncryptedString());
+
+            System.out.println("The Decrypted password at Bank is " + decryptedPassword + "\n");
+            String correctPassword = Helper.getUserPassword(transactionInfo.getPayerID());
+            if (decryptedPassword.equals(correctPassword)) {
+                responseForNPCIObj.setStatus(Constants.Transaction.Response.SUCCESS);
+            } else {
+                responseForNPCIObj.setStatus(Constants.Transaction.Response.WRONG_PASSWORD);
+                responseForNPCIStatus = HttpStatus.BAD_REQUEST;
+            }
+            responseForNPCIStr = xmlMapper.writeValueAsString(responseForNPCIObj);
+        } catch (Exception e) {
+            System.out.println("Exception caught");
+            responseForNPCIStr = "";
+            responseForNPCIObj.setStatus(Constants.Transaction.Response.FAILED);
+            responseForNPCIStatus = HttpStatus.BAD_REQUEST;
+            try {
+                responseForNPCIStr = xmlMapper.writeValueAsString(responseForNPCIObj);
+            } catch (Exception ignored) {
+                System.out.println("caught here");
+            }
+        }
+        System.out.println("The response sent back to NPCI from bank in XML is: \n"+Helper.getPrettyXML(responseForNPCIStr, ResponseStatusInfo.class));
+        return new ResponseEntity<>(responseForNPCIStr, responseForNPCIStatus);
     }
 }
+
+
+
+
+
+
