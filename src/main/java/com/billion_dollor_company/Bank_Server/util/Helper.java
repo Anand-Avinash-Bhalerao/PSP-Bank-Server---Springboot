@@ -11,6 +11,11 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.sql.*;
+
+import java.sql.PreparedStatement;
+
+
 public class Helper {
     public static String encode(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
@@ -50,6 +55,49 @@ public class Helper {
     public static String getUserPassword(String userID) {
         return "123456";
     }
+
+    public static String getUserPasswordFromDb(String upiId) throws SQLException, ClassNotFoundException {
+        Connection connection = null;
+        String hashed_password = null;
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/Be_Project";
+            String username = "root";
+            String password = "root";
+
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                String sql = "SELECT encrypted_password FROM users WHERE upi_id = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setString(1, upiId);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            hashed_password = rs.getString("encrypted_password");
+                        }
+                    }
+                    finally {
+                        stmt.close();
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // below two lines are used for connectivity.
+
+
+
+            System.out.println("Value fetched from database: "+ hashed_password);
+
+            connection.close();
+        } catch (Exception exception) {
+            System.out.println(exception);
+        }
+
+        return hashed_password;
+    }
+
+
 
     public static Map<String, String> getUserInfo(String upiID) {
 

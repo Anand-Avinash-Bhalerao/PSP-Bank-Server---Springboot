@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 
+import java.security.MessageDigest;
+
 @RestController
 @RequestMapping("/bank")
 public class BankController {
@@ -61,10 +63,22 @@ public class BankController {
 
             DecryptionManager manager = new DecryptionManager(Constants.Keys.BANK_PRIVATE_KEY, "Bank decryption Key");
             String decryptedPassword = manager.getDecryptedMessage(transactionInfo.getEncryptedString());
-
-            System.out.println("The Decrypted password at Bank is " + decryptedPassword + "\n");
-            String correctPassword = Helper.getUserPassword(transactionInfo.getPayerID());
-            if (decryptedPassword.equals(correctPassword)) {
+            MessageDigest obj = MessageDigest.getInstance("SHA-256");
+            //use update() method for passing data to the created MessageDigest Object
+            obj.update(decryptedPassword.getBytes());
+            //use the digest() method for computing the message digest
+            byte[] byteArray = obj.digest();
+            System.out.println(byteArray);
+            //convert the byte array in to Hex String format
+            StringBuffer hexData = new StringBuffer();
+            for (int i = 0; i < byteArray.length; i++) {
+                hexData.append(Integer.toHexString(0xFF & byteArray[i]));
+            }
+            String hashedDecryptedPassword= hexData.toString();
+            String correctPassword = Helper.getUserPasswordFromDb(transactionInfo.getPayerID());
+            System.out.println("Hashed Password fetched from database: "+hashedDecryptedPassword);
+            System.out.println("Correct Password: "+correctPassword);
+            if (hashedDecryptedPassword.equals(correctPassword)) {
                 responseForNPCIObj.setStatus(Constants.Transaction.Response.SUCCESS);
             } else {
                 responseForNPCIObj.setStatus(Constants.Transaction.Response.WRONG_PASSWORD);
