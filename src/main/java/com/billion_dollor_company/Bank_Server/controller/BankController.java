@@ -60,26 +60,28 @@ public class BankController {
             String decryptedPassword = manager.getDecryptedMessage(transactionInfo.getEncryptedPassword());
 
             System.out.println("The Decrypted password at Bank is " + decryptedPassword + "\n");
-
-            MessageDigest obj = MessageDigest.getInstance("SHA-256");
-            //use update() method for passing data to the created MessageDigest Object
-            obj.update(decryptedPassword.getBytes());
-            //use the digest() method for computing the message digest
-            byte[] byteArray = obj.digest();
-            System.out.println(byteArray);
-            //convert the byte array in to Hex String format
-            StringBuffer hexData = new StringBuffer();
-            for (int i = 0; i < byteArray.length; i++) {
-                hexData.append(Integer.toHexString(0xFF & byteArray[i]));
-            }
-            String hashedDecryptedPassword= hexData.toString();
+//
+//            MessageDigest obj = MessageDigest.getInstance("SHA-256");
+//            //use update() method for passing data to the created MessageDigest Object
+//            obj.update(decryptedPassword.getBytes());
+//            //use the digest() method for computing the message digest
+//            byte[] byteArray = obj.digest();
+//            System.out.println(byteArray);
+//            //convert the byte array in to Hex String format
+//            StringBuffer hexData = new StringBuffer();
+//            for (int i = 0; i < byteArray.length; i++) {
+//                hexData.append(Integer.toHexString(0xFF & byteArray[i]));
+//            }
+//            String hashedDecryptedPassword= hexData.toString();
             String correctPassword = Helper.getUserPasswordFromDb(transactionInfo.getPayerUpiID());
 
-            System.out.println("the hashed pw == correct pw is : "+ hashedDecryptedPassword.equals(correctPassword));
-            if (hashedDecryptedPassword.equals(correctPassword)) {
+//            System.out.println("the hashed pw == correct pw is : "+ hashedDecryptedPassword.equals(correctPassword));
+            if (decryptedPassword.equals(correctPassword)) {
                 responseForNPCIObj.setStatus(Constants.Transaction.Response.SUCCESS);
+                System.out.println("The password is correct\n");
                 //do the transaction.
             } else {
+                System.out.println("The password is not correct\n");
                 responseForNPCIObj.setStatus(Constants.Transaction.Response.WRONG_PASSWORD);
                 responseForNPCIStatus = HttpStatus.OK;
             }
