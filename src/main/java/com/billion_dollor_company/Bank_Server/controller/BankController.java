@@ -1,14 +1,12 @@
 package com.billion_dollor_company.Bank_Server.controller;
 
 
-import com.billion_dollor_company.Bank_Server.models.AccountInfo;
 import com.billion_dollor_company.Bank_Server.models.ResponseStatusInfo;
 import com.billion_dollor_company.Bank_Server.models.TransactionRequest;
 import com.billion_dollor_company.Bank_Server.service.AccountDetailsService;
 import com.billion_dollor_company.Bank_Server.util.Constants;
 import com.billion_dollor_company.Bank_Server.util.Helper;
 import com.billion_dollor_company.Bank_Server.util.cryptography.DecryptionManager;
-import com.billion_dollor_company.Bank_Server.util.helpers.HelperXML;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
+import java.security.MessageDigest;
 
 @RestController
 @RequestMapping("/bank")
@@ -50,7 +47,7 @@ public class BankController {
             } catch (Exception ignored) {
             }
 
-            ResponseEntity<String> errorResponse = new ResponseEntity<>(errorResponseForNPCIBody, HttpStatus.BAD_REQUEST);
+            ResponseEntity<String> errorResponse = new ResponseEntity<>(errorResponseForNPCIBody, HttpStatus.OK);
             return errorResponse;
         }
 
@@ -60,22 +57,40 @@ public class BankController {
         try {
 
             DecryptionManager manager = new DecryptionManager(Constants.Keys.BANK_PRIVATE_KEY, "Bank decryption Key");
-            String decryptedPassword = manager.getDecryptedMessage(transactionInfo.getEncryptedString());
+            String decryptedPassword = manager.getDecryptedMessage(transactionInfo.getEncryptedPassword());
 
             System.out.println("The Decrypted password at Bank is " + decryptedPassword + "\n");
-            String correctPassword = Helper.getUserPassword(transactionInfo.getPayerID());
+//
+//            MessageDigest obj = MessageDigest.getInstance("SHA-256");
+//            //use update() method for passing data to the created MessageDigest Object
+//            obj.update(decryptedPassword.getBytes());
+//            //use the digest() method for computing the message digest
+//            byte[] byteArray = obj.digest();
+//            System.out.println(byteArray);
+//            //convert the byte array in to Hex String format
+//            StringBuffer hexData = new StringBuffer();
+//            for (int i = 0; i < byteArray.length; i++) {
+//                hexData.append(Integer.toHexString(0xFF & byteArray[i]));
+//            }
+//            String hashedDecryptedPassword= hexData.toString();
+            String correctPassword = Helper.getUserPasswordFromDb(transactionInfo.getPayerUpiID());
+
+//            System.out.println("the hashed pw == correct pw is : "+ hashedDecryptedPassword.equals(correctPassword));
             if (decryptedPassword.equals(correctPassword)) {
                 responseForNPCIObj.setStatus(Constants.Transaction.Response.SUCCESS);
+                System.out.println("The password is correct\n");
+                //do the transaction.
             } else {
+                System.out.println("The password is not correct\n");
                 responseForNPCIObj.setStatus(Constants.Transaction.Response.WRONG_PASSWORD);
-                responseForNPCIStatus = HttpStatus.BAD_REQUEST;
+                responseForNPCIStatus = HttpStatus.OK;
             }
             responseForNPCIStr = xmlMapper.writeValueAsString(responseForNPCIObj);
         } catch (Exception e) {
             System.out.println("Exception caught");
             responseForNPCIStr = "";
             responseForNPCIObj.setStatus(Constants.Transaction.Response.FAILED);
-            responseForNPCIStatus = HttpStatus.BAD_REQUEST;
+            responseForNPCIStatus = HttpStatus.OK;
             try {
                 responseForNPCIStr = xmlMapper.writeValueAsString(responseForNPCIObj);
             } catch (Exception ignored) {
