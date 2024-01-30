@@ -9,4 +9,7 @@ public interface AccountDAO {
     List<AccountInfo> get();
 
     void save(AccountInfo info);
+
+
+    // getPassword(String upiID)
 }

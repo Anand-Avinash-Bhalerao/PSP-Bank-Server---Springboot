@@ -1,67 +1,111 @@
 package com.billion_dollor_company.Bank_Server.models;
 
 public class TransactionRequest {
-    private String amount;
+    private String payeeFullName;
+    private String amountToTransfer;
+    private String payeeAccountNo;
+    private String payeeBankName;
+    private String payerFullName;
+    private String payerAccountNo;
+    private String payerBankName;
+    private String payerUpiID;
+    private String encryptedPassword;
+    private String payeeUpiID;
 
-    private String encryptedString;
-
-    private String payerID;
-
-    private String bankName;
-
-    private String payeeID;
-
-    public String getAmount() {
-        return amount;
+    public void setPayeeFullName(String payeeFullName){
+        this.payeeFullName = payeeFullName;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public String getPayeeFullName(){
+        return payeeFullName;
     }
 
-    public String getEncryptedString() {
-        return encryptedString;
+    public void setAmountToTransfer(String amountToTransfer){
+        this.amountToTransfer = amountToTransfer;
     }
 
-    public void setEncryptedString(String encryptedString) {
-        this.encryptedString = encryptedString;
+    public String getAmountToTransfer(){
+        return amountToTransfer;
     }
 
-    public String getPayerID() {
-        return payerID;
+    public void setPayeeAccountNo(String payeeAccountNo){
+        this.payeeAccountNo = payeeAccountNo;
     }
 
-    public void setPayerID(String payerID) {
-        this.payerID = payerID;
+    public String getPayeeAccountNo(){
+        return payeeAccountNo;
     }
 
-    public String getBankName() {
-        return bankName;
+    public void setPayeeBankName(String payeeBankName){
+        this.payeeBankName = payeeBankName;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
+    public String getPayeeBankName(){
+        return payeeBankName;
     }
 
-    public String getPayeeID() {
-        return payeeID;
+    public void setPayerFullName(String payerFullName){
+        this.payerFullName = payerFullName;
     }
 
-    public void setPayeeID(String payeeID) {
-        this.payeeID = payeeID;
+    public String getPayerFullName(){
+        return payerFullName;
     }
 
-    public TransactionRequest(){}
+    public void setPayerAccountNo(String payerAccountNo){
+        this.payerAccountNo = payerAccountNo;
+    }
 
+    public String getPayerAccountNo(){
+        return payerAccountNo;
+    }
+
+    public void setPayerBankName(String payerBankName){
+        this.payerBankName = payerBankName;
+    }
+
+    public String getPayerBankName(){
+        return payerBankName;
+    }
+
+    public void setPayerUpiID(String payerUpiID){
+        this.payerUpiID = payerUpiID;
+    }
+
+    public String getPayerUpiID(){
+        return payerUpiID;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword){
+        this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getEncryptedPassword(){
+        return encryptedPassword;
+    }
+
+    public void setPayeeUpiID(String payeeUpiID){
+        this.payeeUpiID = payeeUpiID;
+    }
+
+    public String getPayeeUpiID(){
+        return payeeUpiID;
+    }
 
     @Override
-    public String toString() {
-        return "TransactionRequest{" +
-                "amount='" + amount + '\'' +
-                ", encryptedString='" + encryptedString + '\'' +
-                ", payerID='" + payerID + '\'' +
-                ", payeeID='" + payeeID + '\'' +
-                ", bankName='" + bankName + '\'' +
-                '}';
+    public String toString(){
+        return
+                "TransactionReq{" +
+                        "payeeFullName = '" + payeeFullName + '\'' +
+                        ",amountToTransfer = '" + amountToTransfer + '\'' +
+                        ",payeeAccountNo = '" + payeeAccountNo + '\'' +
+                        ",payeeBankName = '" + payeeBankName + '\'' +
+                        ",payerFullName = '" + payerFullName + '\'' +
+                        ",payerAccountNo = '" + payerAccountNo + '\'' +
+                        ",payerBankName = '" + payerBankName + '\'' +
+                        ",payerUpiID = '" + payerUpiID + '\'' +
+                        ",encryptedPassword = '" + encryptedPassword + '\'' +
+                        ",payeeUpiID = '" + payeeUpiID + '\'' +
+                        "}";
     }
 }
