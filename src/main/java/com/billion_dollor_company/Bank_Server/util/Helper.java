@@ -11,6 +11,9 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+
+import com.billion_dollor_company.Bank_Server.service.TransactionService;
+
 public class Helper {
     public static String encode(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
@@ -45,10 +48,14 @@ public class Helper {
         }
         return "";
     }
-    public static String getUserPasswordFromDb(String upiId){
-        return "123456";
-    }
+//    public static String getUserPasswordFromDb(String upiId){
+//        return "123456";
+//    }
 
+//    public static String getUserPasswordFromDb(String upiId)
+//    {
+//        return TransactionService.getEncryptedPassword(upiId);
+//    }
 
 //    public static String getUserPasswordFromDb(String upiId) {
 //        Connection connection = null;

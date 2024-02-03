@@ -18,12 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.MessageDigest;
 
+
+import com.billion_dollor_company.Bank_Server.service.TransactionService;
+
 @RestController
 @RequestMapping("/bank")
 public class BankController {
 
     @Autowired
     private AccountDetailsService accountDetailsService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @PostMapping("/transaction")
     public ResponseEntity<String> initiateTransaction(@RequestBody String reqFromNPCI) {
@@ -73,8 +79,9 @@ public class BankController {
 //                hexData.append(Integer.toHexString(0xFF & byteArray[i]));
 //            }
 //            String hashedDecryptedPassword= hexData.toString();
-            String correctPassword = Helper.getUserPasswordFromDb(transactionInfo.getPayerUpiID());
+//            String correctPassword = Helper.getUserPasswordFromDb(transactionInfo.getPayerUpiID());
 
+            String correctPassword=transactionService.getEncryptedPassword(transactionInfo.getPayerUpiID());
 //            System.out.println("the hashed pw == correct pw is : "+ hashedDecryptedPassword.equals(correctPassword));
             if (decryptedPassword.equals(correctPassword)) {
                 responseForNPCIObj.setStatus(Constants.Transaction.Response.SUCCESS);
