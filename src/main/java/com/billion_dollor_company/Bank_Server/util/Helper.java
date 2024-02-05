@@ -6,13 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import java.sql.*;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-
-
-import com.billion_dollor_company.Bank_Server.service.TransactionService;
 
 public class Helper {
     public static String encode(byte[] data) {
@@ -48,9 +44,9 @@ public class Helper {
         }
         return "";
     }
-//    public static String getUserPasswordFromDb(String upiId){
-//        return "123456";
-//    }
+    public static String getUserPasswordFromDb(String upiId){
+        return "123456";
+    }
 
 //    public static String getUserPasswordFromDb(String upiId)
 //    {
