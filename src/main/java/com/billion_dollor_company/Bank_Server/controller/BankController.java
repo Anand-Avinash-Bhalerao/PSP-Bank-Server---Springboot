@@ -9,17 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/bank")
+@RequestMapping(path = "/bank", produces = {"application/xml"})
 public class BankController {
 
     @Autowired
     private BankService bankService;
 
     @PostMapping("/transaction")
-    @ResponseBody
     public ResponseEntity<TransactionResponseInfo> initiateTransaction(@RequestBody TransactionRequestInfo request) {
-        System.out.println("The request at bank is: " + request);
-        return bankService.initiateTransaction(request);
+        return ResponseEntity.ok(bankService.initiateTransaction(request));
     }
 }
 

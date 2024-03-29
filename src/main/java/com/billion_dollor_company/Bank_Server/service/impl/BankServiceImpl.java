@@ -49,7 +49,7 @@ public class BankServiceImpl implements BankService {
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
-    public ResponseEntity<TransactionResponseInfo> initiateTransaction(TransactionRequestInfo requestInfo) {
+    public TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo) {
         // Extract the upiID of payer and payee.
         // payer is the one paying and payee is the one receiving the money.
         String payerUpiID = requestInfo.getPayerUpiID();
@@ -104,8 +104,6 @@ public class BankServiceImpl implements BankService {
                 responseInfo.setMessage(Constants.Values.INCORRECT_PASSWORD);
             }
         }
-        return ResponseEntity
-                .ok()
-                .body(responseInfo);
+        return responseInfo;
     }
 }

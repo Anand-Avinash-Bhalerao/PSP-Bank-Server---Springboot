@@ -20,7 +20,7 @@ public class PSPServiceImpl implements PSPService {
     private NpciApiService npciApiService;
 
     @Override
-    public ResponseEntity<TransactionResponseInfo> initiateTransaction(TransactionRequestInfo requestInfo) {
+    public TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo) {
         return npciApiService.initiateTransaction(requestInfo);
     }
 

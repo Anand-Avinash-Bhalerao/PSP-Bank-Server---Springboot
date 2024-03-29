@@ -8,13 +8,11 @@ import com.billion_dollor_company.Bank_Server.service.interfaces.BankService;
 import com.billion_dollor_company.Bank_Server.service.interfaces.PSPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/psp")
+@RequestMapping(value = "/psp",produces = {"application/json"})
 public class PSPController {
 
     @Autowired
@@ -23,19 +21,14 @@ public class PSPController {
     @Autowired
     private BankService bankService;
 
-    @RequestMapping("/transaction")
+    @PostMapping("/transaction")
     public ResponseEntity<TransactionResponseInfo> initiateTransaction(@RequestBody TransactionRequestInfo request) {
-        return pspService.initiateTransaction(request);
+        return ResponseEntity.ok(pspService.initiateTransaction(request));
     }
 
-    @RequestMapping("/userInfo")
+    @GetMapping("/userInfo")
     public ResponseEntity<AccountInfo> getUserInfo(@RequestBody AccountInfo request) {
-
-        AccountInfo userAccountInfo = pspService.getUserInfo(request);
-        if (userAccountInfo == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userAccountInfo);
+        return ResponseEntity.ok(pspService.getUserInfo(request));
     }
 
 }

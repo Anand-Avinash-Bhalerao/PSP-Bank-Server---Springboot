@@ -15,12 +15,10 @@ public class NpciApiServiceImpl implements NpciApiService {
     @Autowired
     private RestTemplate restTemplate;
 
+    // To make an API call to NPCI.
     @Override
-    public ResponseEntity<TransactionResponseInfo> initiateTransaction(TransactionRequestInfo requestInfo) {
-
+    public TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo) {
         String npciServerUrl = Constants.Servers.NPCI_Server.getTransactionURL();
-        System.out.println("Here");
-        // make the API call to NPCI.
-        return restTemplate.postForEntity(npciServerUrl, requestInfo, TransactionResponseInfo.class);
+        return restTemplate.postForEntity(npciServerUrl, requestInfo, TransactionResponseInfo.class).getBody();
     }
 }

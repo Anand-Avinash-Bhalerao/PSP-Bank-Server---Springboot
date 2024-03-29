@@ -6,6 +6,6 @@ import com.billion_dollor_company.Bank_Server.models.TransactionResponseInfo;
 import org.springframework.http.ResponseEntity;
 
 public interface PSPService {
-    ResponseEntity<TransactionResponseInfo> initiateTransaction(TransactionRequestInfo requestInfo);
+    TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo);
     AccountInfo getUserInfo(AccountInfo infoRequest);
 }

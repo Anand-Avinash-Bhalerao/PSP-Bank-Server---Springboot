@@ -19,8 +19,8 @@ public class Constants {
 
         public static class Response {
             public static final String STATUS = "status";
-            public static final String SUCCESS = "success";
-            public static final String FAILED = "failed";
+            public static final String SUCCESS = "Success";
+            public static final String FAILED = "Failed";
             public static final String WRONG_PASSWORD = "Wrong password";
 
         }
