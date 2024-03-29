@@ -1,6 +1,7 @@
 package com.billion_dollor_company.Bank_Server.util.cryptography;
 
 import com.billion_dollor_company.Bank_Server.util.Helper;
+
 import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
@@ -31,12 +32,17 @@ public class DecryptionManager {
         }
     }
 
-    public String getDecryptedMessage(String encryptedMessage) throws Exception {
-        byte[] encryptedBytes = Helper.decode(encryptedMessage);
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+    public String getDecryptedMessage(String encryptedMessage) {
+        try {
 
-        byte[] decryptedMessage = cipher.doFinal(encryptedBytes);
-        return new String(decryptedMessage, StandardCharsets.UTF_8);
+            byte[] encryptedBytes = Helper.decode(encryptedMessage);
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+            byte[] decryptedMessage = cipher.doFinal(encryptedBytes);
+            return new String(decryptedMessage, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

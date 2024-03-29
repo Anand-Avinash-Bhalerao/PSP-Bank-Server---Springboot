@@ -2,8 +2,16 @@ package com.billion_dollor_company.Bank_Server.models;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "users")
 public class AccountInfo {
 
@@ -11,129 +19,32 @@ public class AccountInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer ID;
+    private Integer id;
 
     @Column
-    private String first_name;
+    private String firstName;
 
     @Column
-    private String middle_name;
+    private String middleName;
     @Column
-    private String last_name;
+    private String lastName;
 
 
     @Column
-    private String account_no;
+    private String accountNo;
 
     @Column
     private String balance;
 
     @Column
-    private String mobile_no;
+    private String mobileNo;
+
+    @Column(name = "upi_ID")
+    private String upiID;
 
     @Column
-    private String upi_id;
+    private String encryptedPassword;
 
     @Column
-    private String encrypted_password;
-
-
-    @Column
-    private String original_password;
-
-    public Integer getID() {
-        return ID;
-    }
-
-    public void setID(Integer ID) {
-        this.ID = ID;
-    }
-
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getMiddle_name() {
-        return middle_name;
-    }
-
-    public void setMiddle_name(String middle_name) {
-        this.middle_name = middle_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getAccount_no() {
-        return account_no;
-    }
-
-    public void setAccount_no(String account_no) {
-        this.account_no = account_no;
-    }
-
-    public String getBalance() {
-        return balance;
-    }
-
-    public void setBalance(String balance) {
-        this.balance = balance;
-    }
-
-    public String getMobile_no() {
-        return mobile_no;
-    }
-
-    public void setMobile_no(String mobile_no) {
-        this.mobile_no = mobile_no;
-    }
-
-    public String getUpi_id() {
-        return upi_id;
-    }
-
-    public void setUpi_id(String upi_id) {
-        this.upi_id = upi_id;
-    }
-
-    public String getEncrypted_password() {
-        return encrypted_password;
-    }
-
-    public void setEncrypted_password(String encrypted_password) {
-        this.encrypted_password = encrypted_password;
-    }
-
-    public String getOriginal_password() {
-        return original_password;
-    }
-
-    public void setOriginal_password(String original_password) {
-        this.original_password = original_password;
-    }
-
-    @Override
-    public String toString() {
-        return "AccountInfo{" +
-                "ID=" + ID +
-                ", first_name='" + first_name + '\'' +
-                ", middle_name='" + middle_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", account_no='" + account_no + '\'' +
-                ", balance='" + balance + '\'' +
-                ", mobile_no='" + mobile_no + '\'' +
-                ", upi_id='" + upi_id + '\'' +
-                ", encrypted_password='" + encrypted_password + '\'' +
-                ", original_password='" + original_password + '\'' +
-                '}';
-    }
+    private String originalPassword;
 }
