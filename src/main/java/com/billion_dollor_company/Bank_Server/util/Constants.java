@@ -36,6 +36,13 @@ public class Constants {
     public static class Values {
         public static final String NO_RECORD_FOUND = "No such record found";
         public static final String ERROR_WHILE_CONVERSION = "An error occurred while conversions";
+        public static final String NO_PAYER_ACCOUNT_FOUND = "No payer Account found";
+        public static final String NO_PAYEE_ACCOUNT_FOUND = "No payee Account found";
+
+        public static final String NOT_ENOUGH_BALANCE = "Not enough account balance";
+        public static final String INCORRECT_PASSWORD = "The pin entered is incorrect";
+        public static final String SUCCESSFUL = "Payment Successful";
+
 
         public static final String SOME_ERROR_OCCURRED = "An unknown error occurred";
 

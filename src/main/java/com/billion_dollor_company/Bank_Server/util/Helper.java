@@ -1,12 +1,11 @@
 package com.billion_dollor_company.Bank_Server.util;
 
-import com.billion_dollor_company.Bank_Server.models.TransactionRequest;
+import com.billion_dollor_company.Bank_Server.models.TransactionRequestInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import java.sql.*;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class Helper {
     public static String getPrettyJson(String uglyJSON) {
         try {
 
-            Object obj = TransactionRequest.class;
+            Object obj = TransactionRequestInfo.class;
 
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -50,44 +49,6 @@ public class Helper {
     }
 
 
-//    public static String getUserPasswordFromDb(String upiId) {
-//        Connection connection = null;
-//        String hashed_password = null;
-//        try {
-//
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            String url = "jdbc:mysql://localhost:3306/be_project";
-//            String username = "root";
-//            String password = "root123";
-//
-//            try (Connection conn = DriverManager.getConnection(url, username, password)) {
-//                String sql = "SELECT encrypted_password FROM users WHERE upi_id = ?";
-//                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-//                    stmt.setString(1, upiId);
-//                    try (ResultSet rs = stmt.executeQuery()) {
-//                        if (rs.next()) {
-//                            hashed_password = rs.getString("encrypted_password");
-//                        }
-//                    }
-//                    finally {
-//                        stmt.close();
-//                    }
-//                }
-//
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//            // below two lines are used for connectivity.
-//
-//            System.out.println("Value fetched from database: "+ hashed_password);
-//
-//            connection.close();
-//        } catch (Exception exception) {
-//            System.out.println(exception);
-//        }
-//
-//        return hashed_password;
-//    }
 
     public static Map<String, String> getUserInfo(String upiID) {
 
