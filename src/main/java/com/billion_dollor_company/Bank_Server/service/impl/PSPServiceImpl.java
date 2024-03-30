@@ -22,8 +22,6 @@ public class PSPServiceImpl implements PSPService {
 
     @Override
     public TransactionResponseDTO initiateTransaction(TransactionRequestDTO requestInfo) {
-//        TransactionResponseInfo responseFromNpci = npciApiService.initiateTransaction(requestInfo);
-//        return responseFromNpci;
         return npciApiService.initiateTransaction(requestInfo);
     }
 
