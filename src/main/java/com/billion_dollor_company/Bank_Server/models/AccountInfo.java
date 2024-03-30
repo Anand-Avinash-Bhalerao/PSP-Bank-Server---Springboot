@@ -1,6 +1,7 @@
 package com.billion_dollor_company.Bank_Server.models;
 
 
+import com.billion_dollor_company.Bank_Server.util.Constants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,23 +13,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users")
+@Table(name = Constants.DatabaseTables.USERS_TABLE)
 public class AccountInfo {
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer id;
+    @Column(name = "upi_ID")
+    private String upiID;
 
     @Column
     private String firstName;
 
     @Column
     private String middleName;
+
     @Column
     private String lastName;
-
 
     @Column
     private String accountNo;
@@ -39,12 +38,4 @@ public class AccountInfo {
     @Column
     private String mobileNo;
 
-    @Column(name = "upi_ID")
-    private String upiID;
-
-    @Column
-    private String encryptedPassword;
-
-    @Column
-    private String originalPassword;
 }

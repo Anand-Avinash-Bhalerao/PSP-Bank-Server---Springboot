@@ -1,11 +1,10 @@
 package com.billion_dollor_company.Bank_Server.service.impl;
 
-import com.billion_dollor_company.Bank_Server.models.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.models.TransactionResponseInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
 import com.billion_dollor_company.Bank_Server.service.interfaces.NpciApiService;
 import com.billion_dollor_company.Bank_Server.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

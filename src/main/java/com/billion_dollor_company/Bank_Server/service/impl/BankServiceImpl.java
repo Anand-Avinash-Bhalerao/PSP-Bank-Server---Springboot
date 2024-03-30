@@ -2,15 +2,16 @@ package com.billion_dollor_company.Bank_Server.service.impl;
 
 
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
-import com.billion_dollor_company.Bank_Server.models.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.models.TransactionResponseInfo;
-import com.billion_dollor_company.Bank_Server.repository.BankRepository;
+import com.billion_dollor_company.Bank_Server.models.AccountPasswordInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
+import com.billion_dollor_company.Bank_Server.repository.AccountInfoRepository;
+import com.billion_dollor_company.Bank_Server.repository.AccountPasswordRepository;
 import com.billion_dollor_company.Bank_Server.service.interfaces.BankService;
 import com.billion_dollor_company.Bank_Server.service.interfaces.DatabasePWHashService;
 import com.billion_dollor_company.Bank_Server.util.Constants;
 import com.billion_dollor_company.Bank_Server.util.cryptography.DecryptionManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class BankServiceImpl implements BankService {
 
     @Autowired
-    private BankRepository bankRepository;
+    private AccountInfoRepository accountInfoRepository;
+
+    @Autowired
+    private AccountPasswordRepository accountPasswordRepository;
 
     @Autowired
     private DatabasePWHashService databasePWHashService;
 
-    private String getDecryptedPassword(String encryptedPWEntered){
+    private String getDecryptedPassword(String encryptedPWEntered) {
         // We decrypt the password.
         DecryptionManager decryptionManager = new DecryptionManager(Constants.Keys.BANK_PRIVATE_KEY, "Bank's private key");
         return decryptionManager.getDecryptedMessage(encryptedPWEntered);
@@ -42,7 +46,8 @@ public class BankServiceImpl implements BankService {
         String hashedPwEntered = databasePWHashService.getHashedPassword(pwEntered);
 
         // This is the correct password. payerAccountInfo was fetched from DB.
-        String hashedPwCorrect = payerAccountInfo.getEncryptedPassword();
+        AccountPasswordInfo payeeAccountPasswordInfo = accountPasswordRepository.findByUpiID(payerAccountInfo.getUpiID());
+        String hashedPwCorrect = payeeAccountPasswordInfo.getHashedPassword();
 
         return hashedPwEntered.equals(hashedPwCorrect);
     }
@@ -56,8 +61,8 @@ public class BankServiceImpl implements BankService {
         String payeeUpiID = requestInfo.getPayeeUpiID();
 
         // The account info of the payer and payee.
-        AccountInfo payerAccountInfo = bankRepository.findByUpiID(payerUpiID);
-        AccountInfo payeeAccountInfo = bankRepository.findByUpiID(payeeUpiID);
+        AccountInfo payerAccountInfo = accountInfoRepository.findByUpiID(payerUpiID);
+        AccountInfo payeeAccountInfo = accountInfoRepository.findByUpiID(payeeUpiID);
 
         //This is the response object that will be sent back to the client.
         TransactionResponseInfo responseInfo = new TransactionResponseInfo();
@@ -88,13 +93,13 @@ public class BankServiceImpl implements BankService {
                     // perform the transaction. This need to be transactional. Either everything executes or nothing does.
                     // If anything goes wrong then an exception will be caught, and it will be rolled back.
                     try {
-                        bankRepository.updateBalance(String.valueOf(newPayerBalance), payerUpiID);
-                        bankRepository.updateBalance(String.valueOf(newPayeeBalance), payeeUpiID);
+                        accountInfoRepository.updateBalance(String.valueOf(newPayerBalance), payerUpiID);
+                        accountInfoRepository.updateBalance(String.valueOf(newPayeeBalance), payeeUpiID);
                         responseInfo.setStatus(Constants.Transaction.Response.SUCCESS);
                         responseInfo.setMessage(Constants.Values.SUCCESSFUL);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         responseInfo.setStatus(Constants.Transaction.Response.FAILED);
-                        responseInfo.setMessage(Constants.Values.SOME_ERROR_OCCURRED+ ". Transaction failed: " + e.getMessage());
+                        responseInfo.setMessage(Constants.Values.SOME_ERROR_OCCURRED + ". Transaction failed: " + e.getMessage());
                     }
 
                 } else {

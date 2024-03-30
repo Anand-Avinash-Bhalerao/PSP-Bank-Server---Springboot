@@ -1,11 +1,11 @@
 package com.billion_dollor_company.Bank_Server.service.interfaces;
 
+import com.billion_dollor_company.Bank_Server.payloads.AccountBasicInfo;
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
-import com.billion_dollor_company.Bank_Server.models.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.models.TransactionResponseInfo;
-import org.springframework.http.ResponseEntity;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
 
 public interface PSPService {
     TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo);
-    AccountInfo getUserInfo(AccountInfo infoRequest);
+    AccountBasicInfo getAccountInfo(AccountInfo infoRequest);
 }

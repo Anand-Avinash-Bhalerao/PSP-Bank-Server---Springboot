@@ -1,32 +1,39 @@
 package com.billion_dollor_company.Bank_Server.service.impl;
 
+import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.DataNotFoundException;
+import com.billion_dollor_company.Bank_Server.payloads.AccountBasicInfo;
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
-import com.billion_dollor_company.Bank_Server.models.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.models.TransactionResponseInfo;
-import com.billion_dollor_company.Bank_Server.repository.BankRepository;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
+import com.billion_dollor_company.Bank_Server.repository.AccountInfoRepository;
 import com.billion_dollor_company.Bank_Server.service.interfaces.NpciApiService;
 import com.billion_dollor_company.Bank_Server.service.interfaces.PSPService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PSPServiceImpl implements PSPService {
 
     @Autowired
-    private BankRepository bankRepository;
+    private AccountInfoRepository accountInfoRepository;
 
     @Autowired
     private NpciApiService npciApiService;
 
     @Override
     public TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo) {
+//        TransactionResponseInfo responseFromNpci = npciApiService.initiateTransaction(requestInfo);
+//        return responseFromNpci;
         return npciApiService.initiateTransaction(requestInfo);
     }
 
     @Override
-    public AccountInfo getUserInfo(AccountInfo infoRequest) {
+    public AccountBasicInfo getAccountInfo(AccountInfo infoRequest) {
         String upiID = infoRequest.getUpiID();
-        return bankRepository.findByUpiID(upiID);
+        AccountBasicInfo basicInfo = accountInfoRepository.getByUpiID(upiID);
+        if (basicInfo == null) {
+            throw new DataNotFoundException("The information for the account corresponding to upiID: " + infoRequest.getUpiID() + " was not found.");
+        }
+        return basicInfo;
     }
 }
