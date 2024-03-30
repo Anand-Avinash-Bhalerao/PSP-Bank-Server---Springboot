@@ -1,4 +1,4 @@
-package com.billion_dollor_company.Bank_Server.models;
+package com.billion_dollor_company.Bank_Server.payloads;
 
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
