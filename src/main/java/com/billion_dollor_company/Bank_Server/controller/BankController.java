@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/bank", produces = {"application/xml"})
 public class BankController {
 
+    private final BankService bankService;
+
     @Autowired
-    private BankService bankService;
+    public BankController(BankService bankService) {
+        this.bankService = bankService;
+    }
 
     @PostMapping("/transaction")
     public ResponseEntity<TransactionResponseDTO> initiateTransaction(@RequestBody TransactionRequestDTO request) {

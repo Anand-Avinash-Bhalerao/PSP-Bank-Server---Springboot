@@ -2,10 +2,8 @@ package com.billion_dollor_company.Bank_Server.controller;
 
 
 import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
-import com.billion_dollor_company.Bank_Server.models.AccountInfo;
 import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
 import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
-import com.billion_dollor_company.Bank_Server.service.interfaces.BankService;
 import com.billion_dollor_company.Bank_Server.service.interfaces.PSPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/psp", produces = {"application/json"})
 public class PSPController {
 
-    @Autowired
-    private PSPService pspService;
+    private final PSPService pspService;
 
     @Autowired
-    private BankService bankService;
+    public PSPController(PSPService pspService) {
+        this.pspService = pspService;
+    }
 
     @PostMapping("/transaction")
     public ResponseEntity<TransactionResponseDTO> initiateTransaction(@RequestBody TransactionRequestDTO request) {

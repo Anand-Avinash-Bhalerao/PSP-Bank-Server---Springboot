@@ -11,8 +11,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NpciApiServiceImpl implements NpciApiService {
 
+    private final RestTemplate restTemplate;
+
     @Autowired
-    private RestTemplate restTemplate;
+    public NpciApiServiceImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     // To make an API call to NPCI.
     @Override

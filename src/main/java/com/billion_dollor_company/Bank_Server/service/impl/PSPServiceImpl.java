@@ -20,6 +20,11 @@ public class PSPServiceImpl implements PSPService {
     @Autowired
     private NpciApiService npciApiService;
 
+    public PSPServiceImpl(AccountInfoRepository accountInfoRepository, NpciApiService npciApiService) {
+        this.accountInfoRepository = accountInfoRepository;
+        this.npciApiService = npciApiService;
+    }
+
     @Override
     public TransactionResponseDTO initiateTransaction(TransactionRequestDTO requestInfo) {
         return npciApiService.initiateTransaction(requestInfo);

@@ -20,14 +20,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class BankServiceImpl implements BankService {
 
-    @Autowired
-    private AccountInfoRepository accountInfoRepository;
+    private final AccountInfoRepository accountInfoRepository;
+
+    private final AccountPasswordRepository accountPasswordRepository;
+
+    private final DatabasePWHashService databasePWHashService;
 
     @Autowired
-    private AccountPasswordRepository accountPasswordRepository;
-
-    @Autowired
-    private DatabasePWHashService databasePWHashService;
+    public BankServiceImpl(AccountInfoRepository accountInfoRepository, AccountPasswordRepository accountPasswordRepository, DatabasePWHashService databasePWHashService) {
+        this.accountInfoRepository = accountInfoRepository;
+        this.accountPasswordRepository = accountPasswordRepository;
+        this.databasePWHashService = databasePWHashService;
+    }
 
     private String getDecryptedPassword(String encryptedPWEntered) {
         // We decrypt the password.
