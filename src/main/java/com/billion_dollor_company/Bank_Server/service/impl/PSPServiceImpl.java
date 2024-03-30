@@ -2,7 +2,7 @@ package com.billion_dollor_company.Bank_Server.service.impl;
 
 import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.DataNotFoundException;
 import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
-import com.billion_dollor_company.Bank_Server.payloads.AccountBasicProjection;
+import com.billion_dollor_company.Bank_Server.models.projections.AccountBasicProjection;
 import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
 import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
 import com.billion_dollor_company.Bank_Server.repository.AccountInfoRepository;

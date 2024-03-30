@@ -1,8 +1,7 @@
 package com.billion_dollor_company.Bank_Server.repository;
 
-import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
-import com.billion_dollor_company.Bank_Server.payloads.AccountBasicProjection;
+import com.billion_dollor_company.Bank_Server.models.projections.AccountBasicProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

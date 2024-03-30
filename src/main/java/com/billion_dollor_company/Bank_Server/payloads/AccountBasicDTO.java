@@ -1,15 +1,6 @@
 package com.billion_dollor_company.Bank_Server.payloads;
 
-//public interface AccountBasicDTO {
-//    String getUpiID();
-//    String getFirstName();
-//    String getMiddleName();
-//    String getLastName();
-//    String getAccountNo();
-//    String getMobileNo();
-//}
-
-import jakarta.persistence.Column;
+import com.billion_dollor_company.Bank_Server.models.projections.AccountBasicProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
