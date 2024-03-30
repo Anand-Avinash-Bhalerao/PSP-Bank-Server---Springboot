@@ -7,5 +7,5 @@ import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
 
 public interface PSPService {
     TransactionResponseDTO initiateTransaction(TransactionRequestDTO requestInfo);
-    AccountBasicDTO getAccountInfo(AccountInfo infoRequest);
+    AccountBasicDTO getAccountInfo(AccountBasicDTO infoRequest);
 }
