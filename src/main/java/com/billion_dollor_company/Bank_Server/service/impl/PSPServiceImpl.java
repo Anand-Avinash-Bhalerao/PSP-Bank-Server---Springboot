@@ -37,7 +37,6 @@ public class PSPServiceImpl implements PSPService {
         if (projection == null) {
             throw new DataNotFoundException("The information for the account corresponding to upiID: " + infoRequest.getUpiID() + " was not found.");
         }
-        AccountBasicDTO basicInfo = new AccountBasicDTO(projection);
-        return basicInfo;
+        return new AccountBasicDTO(projection);
     }
 }
