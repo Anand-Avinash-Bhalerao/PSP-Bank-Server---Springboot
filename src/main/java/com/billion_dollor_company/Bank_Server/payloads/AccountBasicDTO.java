@@ -1,6 +1,6 @@
 package com.billion_dollor_company.Bank_Server.payloads;
 
-public interface AccountBasicInfo {
+public interface AccountBasicDTO {
     String getUpiID();
     String getFirstName();
     String getMiddleName();

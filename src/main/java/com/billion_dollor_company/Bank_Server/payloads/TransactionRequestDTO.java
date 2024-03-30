@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JacksonXmlRootElement(localName = "TransactionRequest")
-public class TransactionRequestInfo {
+public class TransactionRequestDTO {
     private String payeeFullName;
     private String amountToTransfer;
     private String payeeAccountNo;

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JacksonXmlRootElement(localName = "status")
-public class StatusResponseInfo {
+public class StatusResponseDTO {
     public String status;
     public String message;
 }
