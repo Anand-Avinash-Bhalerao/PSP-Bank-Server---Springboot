@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JacksonXmlRootElement(localName = "TransactionResponse")
-public class TransactionResponseDTO {
+@JacksonXmlRootElement(localName = "status")
+public class StatusResDTO {
     public String status;
     public String message;
 }

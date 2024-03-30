@@ -1,4 +1,4 @@
-package com.billion_dollor_company.Bank_Server.payloads;
+package com.billion_dollor_company.Bank_Server.payloads.transaction;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JacksonXmlRootElement(localName = "status")
-public class StatusResponseDTO {
+@JacksonXmlRootElement(localName = "TransactionResponse")
+public class TransactionResDTO {
     public String status;
     public String message;
 }

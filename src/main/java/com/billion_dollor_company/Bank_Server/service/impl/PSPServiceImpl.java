@@ -3,8 +3,10 @@ package com.billion_dollor_company.Bank_Server.service.impl;
 import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.DataNotFoundException;
 import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
 import com.billion_dollor_company.Bank_Server.models.projections.AccountBasicProjection;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
+import com.billion_dollor_company.Bank_Server.payloads.checkBalance.BalanceReqDTO;
+import com.billion_dollor_company.Bank_Server.payloads.checkBalance.BalanceResDTO;
+import com.billion_dollor_company.Bank_Server.payloads.transaction.TransactionReqDTO;
+import com.billion_dollor_company.Bank_Server.payloads.transaction.TransactionResDTO;
 import com.billion_dollor_company.Bank_Server.repository.AccountInfoRepository;
 import com.billion_dollor_company.Bank_Server.service.interfaces.NpciApiService;
 import com.billion_dollor_company.Bank_Server.service.interfaces.PSPService;
@@ -26,11 +28,6 @@ public class PSPServiceImpl implements PSPService {
     }
 
     @Override
-    public TransactionResponseDTO initiateTransaction(TransactionRequestDTO requestInfo) {
-        return npciApiService.initiateTransaction(requestInfo);
-    }
-
-    @Override
     public AccountBasicDTO getAccountInfo(AccountBasicDTO infoRequest) {
         String upiID = infoRequest.getUpiID();
         AccountBasicProjection projection = accountInfoRepository.getBasicInfoByUpiID(upiID);
@@ -39,4 +36,16 @@ public class PSPServiceImpl implements PSPService {
         }
         return new AccountBasicDTO(projection);
     }
+
+    @Override
+    public BalanceResDTO getAccountBalance(BalanceReqDTO infoRequest) {
+        return npciApiService.getAccountBalance(infoRequest);
+    }
+
+    @Override
+    public TransactionResDTO initiateTransaction(TransactionReqDTO requestInfo) {
+        return npciApiService.initiateTransaction(requestInfo);
+    }
+
+
 }
