@@ -29,7 +29,7 @@ public class PSPController {
     }
 
     @GetMapping("/accountInfo")
-    public ResponseEntity<AccountBasicDTO> getUserInfo(@RequestBody AccountInfo request) {
+    public ResponseEntity<AccountBasicDTO> getUserInfo(@RequestBody AccountBasicDTO request) {
         AccountBasicDTO userInfo = pspService.getAccountInfo(request);
         return ResponseEntity.ok(userInfo);
     }
