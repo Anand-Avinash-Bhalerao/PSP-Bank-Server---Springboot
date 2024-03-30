@@ -2,7 +2,7 @@ package com.billion_dollor_company.Bank_Server.service.impl;
 
 import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.DataNotFoundException;
 import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
-import com.billion_dollor_company.Bank_Server.models.AccountInfo;
+import com.billion_dollor_company.Bank_Server.payloads.AccountBasicProjection;
 import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
 import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
 import com.billion_dollor_company.Bank_Server.repository.AccountInfoRepository;
@@ -28,12 +28,13 @@ public class PSPServiceImpl implements PSPService {
     }
 
     @Override
-    public AccountBasicDTO getAccountInfo(AccountInfo infoRequest) {
+    public AccountBasicDTO getAccountInfo(AccountBasicDTO infoRequest) {
         String upiID = infoRequest.getUpiID();
-        AccountBasicDTO basicInfo = accountInfoRepository.getByUpiID(upiID);
-        if (basicInfo == null) {
+        AccountBasicProjection projection = accountInfoRepository.getBasicInfoByUpiID(upiID);
+        if (projection == null) {
             throw new DataNotFoundException("The information for the account corresponding to upiID: " + infoRequest.getUpiID() + " was not found.");
         }
+        AccountBasicDTO basicInfo = new AccountBasicDTO(projection);
         return basicInfo;
     }
 }
