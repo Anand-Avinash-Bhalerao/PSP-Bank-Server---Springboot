@@ -1,7 +1,7 @@
 package com.billion_dollor_company.Bank_Server.service.impl;
 
-import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
 import com.billion_dollor_company.Bank_Server.service.interfaces.NpciApiService;
 import com.billion_dollor_company.Bank_Server.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,8 @@ public class NpciApiServiceImpl implements NpciApiService {
 
     // To make an API call to NPCI.
     @Override
-    public TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo) {
+    public TransactionResponseDTO initiateTransaction(TransactionRequestDTO requestInfo) {
         String npciServerUrl = Constants.Servers.NPCI_Server.getTransactionURL();
-        return restTemplate.postForEntity(npciServerUrl, requestInfo, TransactionResponseInfo.class).getBody();
+        return restTemplate.postForEntity(npciServerUrl, requestInfo, TransactionResponseDTO.class).getBody();
     }
 }

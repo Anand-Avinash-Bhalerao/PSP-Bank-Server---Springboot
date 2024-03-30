@@ -1,10 +1,11 @@
 package com.billion_dollor_company.Bank_Server.service.impl;
 
 
+import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.TransactionFailedException;
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
 import com.billion_dollor_company.Bank_Server.models.AccountPasswordInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
 import com.billion_dollor_company.Bank_Server.repository.AccountInfoRepository;
 import com.billion_dollor_company.Bank_Server.repository.AccountPasswordRepository;
 import com.billion_dollor_company.Bank_Server.service.interfaces.BankService;
@@ -34,7 +35,7 @@ public class BankServiceImpl implements BankService {
         return decryptionManager.getDecryptedMessage(encryptedPWEntered);
     }
 
-    private boolean isPasswordCorrect(TransactionRequestInfo requestInfo, AccountInfo payerAccountInfo) {
+    private boolean isPasswordCorrect(TransactionRequestDTO requestInfo, AccountInfo payerAccountInfo) {
 
         // This password was encrypted with bank's public key.
         String encryptedPWEntered = requestInfo.getEncryptedPassword();
@@ -54,7 +55,7 @@ public class BankServiceImpl implements BankService {
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
-    public TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo) {
+    public TransactionResponseDTO initiateTransaction(TransactionRequestDTO requestInfo) {
         // Extract the upiID of payer and payee.
         // payer is the one paying and payee is the one receiving the money.
         String payerUpiID = requestInfo.getPayerUpiID();
@@ -65,10 +66,10 @@ public class BankServiceImpl implements BankService {
         AccountInfo payeeAccountInfo = accountInfoRepository.findByUpiID(payeeUpiID);
 
         //This is the response object that will be sent back to the client.
-        TransactionResponseInfo responseInfo = new TransactionResponseInfo();
+        TransactionResponseDTO responseInfo = new TransactionResponseDTO();
 
         // Initialize the status with failed. Update with success if everything goes correctly.
-        responseInfo.setStatus(Constants.Transaction.Response.FAILED);
+        responseInfo.setStatus(Constants.Transaction.Status.FAILED);
 
         // Check if both the users actually exist.
         if (payerAccountInfo == null) {
@@ -95,10 +96,9 @@ public class BankServiceImpl implements BankService {
                     try {
                         accountInfoRepository.updateBalance(String.valueOf(newPayerBalance), payerUpiID);
                         accountInfoRepository.updateBalance(String.valueOf(newPayeeBalance), payeeUpiID);
-                        responseInfo.setStatus(Constants.Transaction.Response.SUCCESS);
+                        responseInfo.setStatus(Constants.Transaction.Status.SUCCESS);
                         responseInfo.setMessage(Constants.Values.SUCCESSFUL);
                     } catch (Exception e) {
-                        responseInfo.setStatus(Constants.Transaction.Response.FAILED);
                         responseInfo.setMessage(Constants.Values.SOME_ERROR_OCCURRED + ". Transaction failed: " + e.getMessage());
                     }
 
@@ -109,6 +109,11 @@ public class BankServiceImpl implements BankService {
                 responseInfo.setMessage(Constants.Values.INCORRECT_PASSWORD);
             }
         }
+
+        if (responseInfo.getStatus().equals(Constants.Transaction.Status.FAILED)) {
+            throw new TransactionFailedException(responseInfo.getMessage());
+        }
+
         return responseInfo;
     }
 }

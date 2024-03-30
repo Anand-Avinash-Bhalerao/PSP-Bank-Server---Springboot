@@ -1,10 +1,10 @@
 package com.billion_dollor_company.Bank_Server.controller;
 
 
-import com.billion_dollor_company.Bank_Server.payloads.AccountBasicInfo;
+import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
 import com.billion_dollor_company.Bank_Server.service.interfaces.BankService;
 import com.billion_dollor_company.Bank_Server.service.interfaces.PSPService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,14 @@ public class PSPController {
     private BankService bankService;
 
     @PostMapping("/transaction")
-    public ResponseEntity<TransactionResponseInfo> initiateTransaction(@RequestBody TransactionRequestInfo request) {
-        TransactionResponseInfo responseInfo = pspService.initiateTransaction(request);
+    public ResponseEntity<TransactionResponseDTO> initiateTransaction(@RequestBody TransactionRequestDTO request) {
+        TransactionResponseDTO responseInfo = pspService.initiateTransaction(request);
         return ResponseEntity.ok(responseInfo);
     }
 
     @GetMapping("/accountInfo")
-    public ResponseEntity<AccountBasicInfo> getUserInfo(@RequestBody AccountInfo request) {
-        AccountBasicInfo userInfo = pspService.getAccountInfo(request);
+    public ResponseEntity<AccountBasicDTO> getUserInfo(@RequestBody AccountInfo request) {
+        AccountBasicDTO userInfo = pspService.getAccountInfo(request);
         return ResponseEntity.ok(userInfo);
     }
 

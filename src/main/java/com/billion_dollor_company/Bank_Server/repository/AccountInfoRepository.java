@@ -1,6 +1,6 @@
 package com.billion_dollor_company.Bank_Server.repository;
 
-import com.billion_dollor_company.Bank_Server.payloads.AccountBasicInfo;
+import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,7 +14,7 @@ public interface AccountInfoRepository extends JpaRepository<AccountInfo, Intege
 
     // This fetches only the required fields from the database.
     @Query("SELECT a.upiID as upiID, a.firstName as firstName, a.middleName as middleName, a.lastName as lastName, a.accountNo as accountNo, a.mobileNo as mobileNo FROM AccountInfo a WHERE a.upiID = :upiID")
-    AccountBasicInfo getByUpiID(@Param("upiID") String upiID);
+    AccountBasicDTO getByUpiID(@Param("upiID") String upiID);
 
     // Returns the entire record of a user. It contains: firstName, middleName, lastName, mobileNo, upiID, balance, accountNo
     AccountInfo findByUpiID(String upiID);

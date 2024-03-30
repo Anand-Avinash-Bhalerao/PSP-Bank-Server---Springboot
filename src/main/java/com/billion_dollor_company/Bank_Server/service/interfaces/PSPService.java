@@ -1,11 +1,11 @@
 package com.billion_dollor_company.Bank_Server.service.interfaces;
 
-import com.billion_dollor_company.Bank_Server.payloads.AccountBasicInfo;
+import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
 
 public interface PSPService {
-    TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo);
-    AccountBasicInfo getAccountInfo(AccountInfo infoRequest);
+    TransactionResponseDTO initiateTransaction(TransactionRequestDTO requestInfo);
+    AccountBasicDTO getAccountInfo(AccountInfo infoRequest);
 }

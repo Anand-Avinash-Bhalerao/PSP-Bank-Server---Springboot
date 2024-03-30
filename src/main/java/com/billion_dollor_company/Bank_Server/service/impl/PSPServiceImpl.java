@@ -1,10 +1,10 @@
 package com.billion_dollor_company.Bank_Server.service.impl;
 
 import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.DataNotFoundException;
-import com.billion_dollor_company.Bank_Server.payloads.AccountBasicInfo;
+import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
 import com.billion_dollor_company.Bank_Server.models.AccountInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestInfo;
-import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseInfo;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionRequestDTO;
+import com.billion_dollor_company.Bank_Server.payloads.TransactionResponseDTO;
 import com.billion_dollor_company.Bank_Server.repository.AccountInfoRepository;
 import com.billion_dollor_company.Bank_Server.service.interfaces.NpciApiService;
 import com.billion_dollor_company.Bank_Server.service.interfaces.PSPService;
@@ -21,16 +21,16 @@ public class PSPServiceImpl implements PSPService {
     private NpciApiService npciApiService;
 
     @Override
-    public TransactionResponseInfo initiateTransaction(TransactionRequestInfo requestInfo) {
+    public TransactionResponseDTO initiateTransaction(TransactionRequestDTO requestInfo) {
 //        TransactionResponseInfo responseFromNpci = npciApiService.initiateTransaction(requestInfo);
 //        return responseFromNpci;
         return npciApiService.initiateTransaction(requestInfo);
     }
 
     @Override
-    public AccountBasicInfo getAccountInfo(AccountInfo infoRequest) {
+    public AccountBasicDTO getAccountInfo(AccountInfo infoRequest) {
         String upiID = infoRequest.getUpiID();
-        AccountBasicInfo basicInfo = accountInfoRepository.getByUpiID(upiID);
+        AccountBasicDTO basicInfo = accountInfoRepository.getByUpiID(upiID);
         if (basicInfo == null) {
             throw new DataNotFoundException("The information for the account corresponding to upiID: " + infoRequest.getUpiID() + " was not found.");
         }
