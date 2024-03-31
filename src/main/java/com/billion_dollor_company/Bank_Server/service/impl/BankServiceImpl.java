@@ -55,6 +55,8 @@ public class BankServiceImpl implements BankService {
         AccountPasswordInfo payeeAccountPasswordInfo = accountPasswordRepository.findByUpiID(upiID);
         String hashedPwCorrect = payeeAccountPasswordInfo.getHashedPassword();
 
+        // check if the entered password which was hashed matches the correct password hash.
+        // same pin will have the same hashes. if the hashes are same, the pw is correct.
         return hashedPwEntered.equals(hashedPwCorrect);
     }
 
@@ -64,20 +66,27 @@ public class BankServiceImpl implements BankService {
         String upiID = requestInfo.getUpiID();
         String encryptedPassword = requestInfo.getEncryptedPassword();
 
+        // create a response variable. set the status to failed, will get updated to success if everything goes correctly.
         BalanceResDTO responseInfo = new BalanceResDTO();
         responseInfo.setStatus(Constants.Status.FAILED);
+
+        //check if the upiID exists.
         if (!accountInfoRepository.existsByUpiID(upiID)) {
             responseInfo.setMessage(Constants.Messages.NO_ACCOUNT_FOUND + upiID);
-        } else if (!isPasswordCorrect(upiID, encryptedPassword)) {
+        } else if (!isPasswordCorrect(upiID, encryptedPassword)) { // check if password entered is incorrect.
             responseInfo.setMessage(Constants.Messages.INCORRECT_PASSWORD);
         } else {
+
+            // the password was correct. can fetch from repository now.
             BalanceInfoProjection projection = accountInfoRepository.getAccountBalanceByUpiID(upiID);
             responseInfo = new BalanceResDTO(projection);
 
+            // update from failed to success.
             responseInfo.setStatus(Constants.Status.SUCCESS);
             responseInfo.setMessage(Constants.Messages.SUCCESSFUL_CHECK_BALANCE);
         }
 
+        // if anything was failed, throw error.
         if (responseInfo.getStatus().equals(Constants.Status.FAILED)) {
             throw new CheckBalanceFailedException(upiID, responseInfo.getMessage());
         }
@@ -129,6 +138,8 @@ public class BankServiceImpl implements BankService {
                     try {
                         accountInfoRepository.updateBalance(String.valueOf(newPayerBalance), payerUpiID);
                         accountInfoRepository.updateBalance(String.valueOf(newPayeeBalance), payeeUpiID);
+
+                        // set the status from failed to success.
                         responseInfo.setStatus(Constants.Status.SUCCESS);
                         responseInfo.setMessage(Constants.Messages.SUCCESSFUL_PAYMENT);
                     } catch (Exception e) {
@@ -143,6 +154,7 @@ public class BankServiceImpl implements BankService {
             }
         }
 
+        // if the transaction failed because of any reason, throw an exception.
         if (responseInfo.getStatus().equals(Constants.Status.FAILED)) {
             throw new TransactionFailedException(responseInfo.getMessage());
         }

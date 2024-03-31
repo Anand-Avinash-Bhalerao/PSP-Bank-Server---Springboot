@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 
+
+// the passwords are stored in DB by hashing them first.
+// this service can be used to hash a string.
 @Service
 public class DatabasePWHashServiceImpl implements DatabasePWHashService {
     @Override

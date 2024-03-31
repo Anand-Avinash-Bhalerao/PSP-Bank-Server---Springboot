@@ -23,13 +23,13 @@ public class BankController {
 
     @PostMapping("/checkBalance")
     public ResponseEntity<BalanceResDTO> getAccountBalance(@RequestBody BalanceReqDTO request) {
-        System.out.println("The request at bank is "+request);
-
+        // from the service only successful account balance response reaches till here. so no need for exception handling
         return ResponseEntity.ok(bankService.getAccountBalance(request));
     }
 
     @PostMapping("/transaction")
     public ResponseEntity<TransactionResDTO> initiateTransaction(@RequestBody TransactionReqDTO request) {
+        // from the service only successful transaction response reaches till here. so no need for exception handling
         return ResponseEntity.ok(bankService.initiateTransaction(request));
     }
 }
