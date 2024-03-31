@@ -1,6 +1,8 @@
 package com.billion_dollor_company.Bank_Server.controller;
 
 
+import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.AccountBasicRequestException;
+import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.TransactionRequestException;
 import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
 import com.billion_dollor_company.Bank_Server.payloads.checkBalance.BalanceReqDTO;
 import com.billion_dollor_company.Bank_Server.payloads.checkBalance.BalanceResDTO;
@@ -8,8 +10,10 @@ import com.billion_dollor_company.Bank_Server.payloads.transaction.TransactionRe
 import com.billion_dollor_company.Bank_Server.payloads.transaction.TransactionResDTO;
 import com.billion_dollor_company.Bank_Server.service.interfaces.PSPService;
 import com.billion_dollor_company.Bank_Server.util.Constants;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,24 +28,30 @@ public class PSPController {
         this.pspService = pspService;
     }
 
+    // We have not done exception handling after making the service call because if userInfo reaches till here, then it is valid for sure.
+    // If the record does not exist an exception gets thrown in the PSPServiceImpl class.
+    // Exception then gets handled in GlobalExceptionHandler and not here.
     @GetMapping("/accountInfo")
-    public ResponseEntity<AccountBasicDTO> getUserInfo(@RequestBody AccountBasicDTO request) {
-        AccountBasicDTO userInfo = pspService.getAccountInfo(request);
+    public ResponseEntity<AccountBasicDTO> getUserInfo(@Valid @RequestBody AccountBasicDTO request, BindingResult errors) {
 
-        // We have not done exception handling here because if it userInfo reaches till here, then it is valid.
-        // If the record does not exist an exception gets thrown in the PSPServiceImpl class.
-        // Exception then gets handled in GlobalExceptionHandler.
+        // to handle errors in the request sent from client.
+        if(errors.hasErrors())
+            throw new AccountBasicRequestException(errors);
+
+        AccountBasicDTO userInfo = pspService.getAccountInfo(request);
         return ResponseEntity.ok(userInfo);
     }
 
     @PostMapping("/checkBalance")
-    public ResponseEntity<BalanceResDTO> getAccountBalance(@RequestBody BalanceReqDTO request) {
-        System.out.println("The request is "+request);
+    public ResponseEntity<BalanceResDTO> getAccountBalance(@RequestBody BalanceReqDTO request, BindingResult errors) {
+
+        if(errors.hasErrors())
+            throw new AccountBasicRequestException(errors);
 
         BalanceResDTO responseInfo = pspService.getAccountBalance(request);
 
         // Check if the status was SUCCESS or FAILED. if failed then send 400 Bad Request otherwise 200 OK.
-        if (responseInfo.getStatus().equals(Constants.Transaction.Status.FAILED)) {
+        if (responseInfo.getStatus().equals(Constants.Status.FAILED)) {
             return ResponseEntity.badRequest().body(responseInfo);
         }
         return ResponseEntity.ok().body(responseInfo);
@@ -49,11 +59,15 @@ public class PSPController {
 
 
     @PostMapping("/transaction")
-    public ResponseEntity<TransactionResDTO> initiateTransaction(@RequestBody TransactionReqDTO request) {
+    public ResponseEntity<TransactionResDTO> initiateTransaction(@RequestBody TransactionReqDTO request, BindingResult errors) {
+
+        if(errors.hasErrors())
+            throw new TransactionRequestException(errors);
+
         TransactionResDTO responseInfo = pspService.initiateTransaction(request);
 
         // Check if the transaction status was SUCCESS or FAILED. if failed then send 400 Bad Request otherwise 200 OK.
-        if (responseInfo.getStatus().equals(Constants.Transaction.Status.FAILED)) {
+        if (responseInfo.getStatus().equals(Constants.Status.FAILED)) {
             return ResponseEntity.badRequest().body(responseInfo);
         }
         return ResponseEntity.ok().body(responseInfo);

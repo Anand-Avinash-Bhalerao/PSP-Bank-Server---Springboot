@@ -1,6 +1,9 @@
 package com.billion_dollor_company.Bank_Server.payloads;
 
 import com.billion_dollor_company.Bank_Server.models.projections.AccountBasicProjection;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AccountBasicDTO{
+
+    @NotEmpty(message = "The upiID field cannot be empty.")
     private String upiID;
 
     private String firstName;

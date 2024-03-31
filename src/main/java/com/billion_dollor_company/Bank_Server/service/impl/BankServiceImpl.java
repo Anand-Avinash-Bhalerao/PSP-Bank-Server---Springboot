@@ -65,20 +65,20 @@ public class BankServiceImpl implements BankService {
         String encryptedPassword = requestInfo.getEncryptedPassword();
 
         BalanceResDTO responseInfo = new BalanceResDTO();
-        responseInfo.setStatus(Constants.Transaction.Status.FAILED);
+        responseInfo.setStatus(Constants.Status.FAILED);
         if (!accountInfoRepository.existsByUpiID(upiID)) {
-            responseInfo.setMessage(Constants.Values.NO_ACCOUNT_FOUND + upiID);
+            responseInfo.setMessage(Constants.Messages.NO_ACCOUNT_FOUND + upiID);
         } else if (!isPasswordCorrect(upiID, encryptedPassword)) {
-            responseInfo.setMessage(Constants.Values.INCORRECT_PASSWORD);
+            responseInfo.setMessage(Constants.Messages.INCORRECT_PASSWORD);
         } else {
             BalanceInfoProjection projection = accountInfoRepository.getAccountBalanceByUpiID(upiID);
             responseInfo = new BalanceResDTO(projection);
 
-            responseInfo.setStatus(Constants.Transaction.Status.SUCCESS);
-            responseInfo.setMessage(Constants.Values.SUCCESSFUL_CHECK_BALANCE);
+            responseInfo.setStatus(Constants.Status.SUCCESS);
+            responseInfo.setMessage(Constants.Messages.SUCCESSFUL_CHECK_BALANCE);
         }
 
-        if (responseInfo.getStatus().equals(Constants.Transaction.Status.FAILED)) {
+        if (responseInfo.getStatus().equals(Constants.Status.FAILED)) {
             throw new CheckBalanceFailedException(upiID, responseInfo.getMessage());
         }
 
@@ -102,13 +102,13 @@ public class BankServiceImpl implements BankService {
         TransactionResDTO responseInfo = new TransactionResDTO();
 
         // Initialize the status with failed. Update with success if everything goes correctly.
-        responseInfo.setStatus(Constants.Transaction.Status.FAILED);
+        responseInfo.setStatus(Constants.Status.FAILED);
 
         // Check if both the users actually exist.
         if (payerAccountInfo == null) {
-            responseInfo.setMessage(Constants.Values.NO_PAYER_ACCOUNT_FOUND);
+            responseInfo.setMessage(Constants.Messages.NO_PAYER_ACCOUNT_FOUND);
         } else if (payeeAccountInfo == null) {
-            responseInfo.setMessage(Constants.Values.NO_PAYEE_ACCOUNT_FOUND);
+            responseInfo.setMessage(Constants.Messages.NO_PAYEE_ACCOUNT_FOUND);
         } else {
             // Check if the password entered is correct or not.
             if (isPasswordCorrect(payerUpiID, requestInfo.getEncryptedPassword())) {
@@ -129,21 +129,21 @@ public class BankServiceImpl implements BankService {
                     try {
                         accountInfoRepository.updateBalance(String.valueOf(newPayerBalance), payerUpiID);
                         accountInfoRepository.updateBalance(String.valueOf(newPayeeBalance), payeeUpiID);
-                        responseInfo.setStatus(Constants.Transaction.Status.SUCCESS);
-                        responseInfo.setMessage(Constants.Values.SUCCESSFUL_PAYMENT);
+                        responseInfo.setStatus(Constants.Status.SUCCESS);
+                        responseInfo.setMessage(Constants.Messages.SUCCESSFUL_PAYMENT);
                     } catch (Exception e) {
-                        responseInfo.setMessage(Constants.Values.SOME_ERROR_OCCURRED + ". Transaction failed: " + e.getMessage());
+                        responseInfo.setMessage(Constants.Messages.SOME_ERROR_OCCURRED + ". Transaction failed: " + e.getMessage());
                     }
 
                 } else {
-                    responseInfo.setMessage(Constants.Values.NOT_ENOUGH_BALANCE);
+                    responseInfo.setMessage(Constants.Messages.NOT_ENOUGH_BALANCE);
                 }
             } else {
-                responseInfo.setMessage(Constants.Values.INCORRECT_PASSWORD);
+                responseInfo.setMessage(Constants.Messages.INCORRECT_PASSWORD);
             }
         }
 
-        if (responseInfo.getStatus().equals(Constants.Transaction.Status.FAILED)) {
+        if (responseInfo.getStatus().equals(Constants.Status.FAILED)) {
             throw new TransactionFailedException(responseInfo.getMessage());
         }
 
