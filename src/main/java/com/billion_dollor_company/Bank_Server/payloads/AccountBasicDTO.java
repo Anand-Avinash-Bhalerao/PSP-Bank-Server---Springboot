@@ -24,10 +24,6 @@ public class AccountBasicDTO{
 
     private String lastName;
 
-    private String accountNo;
-
-    private String bankName;
-
     private String mobileNo;
 
     public AccountBasicDTO(AccountBasicProjection projection) {
@@ -35,9 +31,7 @@ public class AccountBasicDTO{
         this.firstName = projection.getFirstName();
         this.middleName = projection.getMiddleName();
         this.lastName = projection.getLastName();
-        this.accountNo = projection.getAccountNo();
         this.mobileNo = projection.getMobileNo();
-        this.bankName = projection.getBankName();
     }
 }
 
