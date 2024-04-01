@@ -9,10 +9,6 @@ public interface AccountBasicProjection {
 
     String getLastName();
 
-    String getAccountNo();
-
     String getMobileNo();
-
-    String getBankName();
 
 }

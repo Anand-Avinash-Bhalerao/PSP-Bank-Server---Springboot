@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
     public interface AccountInfoRepository extends JpaRepository<AccountInfo, String> {
 
     // This fetches only the required fields from the database.
-    @Query("SELECT a.upiID as upiID, a.firstName as firstName, a.middleName as middleName, a.lastName as lastName, a.accountNo as accountNo, a.mobileNo as mobileNo, a.bankName as bankName FROM AccountInfo a WHERE a.upiID = :upiID")
+    @Query("SELECT a.upiID as upiID, a.firstName as firstName, a.middleName as middleName, a.lastName as lastName, a.mobileNo as mobileNo FROM AccountInfo a WHERE a.upiID = :upiID")
     AccountBasicProjection getBasicInfoByUpiID(@Param("upiID") String upiID);
 
     @Query("SELECT a.upiID as upiID, a.balance as balance FROM AccountInfo a WHERE a.upiID = :upiID")
