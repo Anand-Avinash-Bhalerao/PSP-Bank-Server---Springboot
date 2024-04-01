@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -18,11 +19,15 @@ public class GlobalExceptionHandler {
 
     private String getErrorMessage(BindingResult errors) {
         StringBuilder errorMessageBuilder = new StringBuilder();
-        errors.getAllErrors().forEach((error) -> {
+        int counter = 0;
+        final int noOfErrors = errors.getErrorCount();
+        for (ObjectError error : errors.getAllErrors()) {
+            counter++;
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errorMessageBuilder.append(fieldName).append(" : ").append(errorMessage);
-        });
+            if (counter != noOfErrors) errorMessageBuilder.append(" | ");
+        }
         return errorMessageBuilder.toString();
     }
 

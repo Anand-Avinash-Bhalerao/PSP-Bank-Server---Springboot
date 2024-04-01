@@ -83,7 +83,6 @@ public class BankServiceImpl implements BankService {
 
             // update from failed to success.
             responseInfo.setStatus(Constants.Status.SUCCESS);
-            responseInfo.setMessage(Constants.Messages.SUCCESSFUL_CHECK_BALANCE);
         }
 
         // if anything was failed, throw error.

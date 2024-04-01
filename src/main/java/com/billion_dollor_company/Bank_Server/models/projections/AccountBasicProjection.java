@@ -12,4 +12,7 @@ public interface AccountBasicProjection {
     String getAccountNo();
 
     String getMobileNo();
+
+    String getBankName();
+
 }

@@ -31,9 +31,9 @@ public class PSPController {
     // We have not done exception handling after making the service call because if userInfo reaches till here, then it is valid for sure.
     // If the record does not exist an exception gets thrown in the PSPServiceImpl class.
     // Exception then gets handled in GlobalExceptionHandler and not here.
-    @GetMapping("/accountInfo")
+    @PostMapping("/accountInfo")
     public ResponseEntity<AccountBasicDTO> getUserInfo(@Valid @RequestBody AccountBasicDTO request, BindingResult errors) {
-
+        System.out.println("here");
         // to handle errors in the request sent from client.
         if(errors.hasErrors())
             throw new AccountBasicRequestException(errors);
@@ -43,7 +43,7 @@ public class PSPController {
     }
 
     @PostMapping("/checkBalance")
-    public ResponseEntity<BalanceResDTO> getAccountBalance(@RequestBody BalanceReqDTO request, BindingResult errors) {
+    public ResponseEntity<BalanceResDTO> getAccountBalance(@Valid @RequestBody BalanceReqDTO request, BindingResult errors) {
 
         if(errors.hasErrors())
             throw new AccountBasicRequestException(errors);
@@ -59,7 +59,7 @@ public class PSPController {
 
 
     @PostMapping("/transaction")
-    public ResponseEntity<TransactionResDTO> initiateTransaction(@RequestBody TransactionReqDTO request, BindingResult errors) {
+    public ResponseEntity<TransactionResDTO> initiateTransaction(@Valid @RequestBody TransactionReqDTO request, BindingResult errors) {
 
         if(errors.hasErrors())
             throw new TransactionRequestException(errors);

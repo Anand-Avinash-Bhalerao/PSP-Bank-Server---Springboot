@@ -33,6 +33,9 @@ public class AccountInfo {
     private String accountNo;
 
     @Column
+    private String bankName;
+
+    @Column
     private String balance;
 
     @Column
