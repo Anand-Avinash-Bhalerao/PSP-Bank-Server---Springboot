@@ -13,7 +13,11 @@ public class Constants {
         public static final String USERS_TABLE = "users";
         public static final String PASSWORDS_TABLE = "passwords";
 
+        public static final String LISTKEYS_TABLE = "list_keys";
+
+
     }
+
 
     public static class Status {
 
@@ -41,6 +45,8 @@ public class Constants {
             private static final String START_TRANSACTION = "/transaction";
             private static final String CHECK_BALANCE = "/checkBalance";
 
+            private static final String LIST_PUBLIC_KEYS="/getListKeys";
+
             public static String getTransactionURL() {
                 return BASE_URL + START_TRANSACTION;
             }
@@ -48,6 +54,8 @@ public class Constants {
             public static String getAccountBalanceURL() {
                 return BASE_URL + CHECK_BALANCE;
             }
+
+            public  static String getListPublicKeys(){return BASE_URL + LIST_PUBLIC_KEYS;}
         }
     }
 }
