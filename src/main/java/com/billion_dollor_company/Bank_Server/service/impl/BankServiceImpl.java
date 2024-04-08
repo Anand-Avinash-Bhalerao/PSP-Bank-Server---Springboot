@@ -47,14 +47,16 @@ public class BankServiceImpl implements BankService {
 
         // This is the actual password which was entered. (Example: 123456)
         String pwEntered = getDecryptedPassword(encryptedPassword);
-
+        System.out.println("The entered password is "+pwEntered);
         // The pwEntered is a regular string but the correct passwords are stored in the DB by hashing them with SHA 256. We need to hash the entered password.
         String hashedPwEntered = databasePWHashService.getHashedPassword(pwEntered);
 
         // This is the correct password. payerAccountInfo was fetched from DB.
         AccountPasswordInfo payeeAccountPasswordInfo = accountPasswordRepository.findByUpiID(upiID);
         String hashedPwCorrect = payeeAccountPasswordInfo.getHashedPassword();
-
+        System.out.println("The ente password is: "+hashedPwEntered);
+        System.out.println("The orig password is: "+hashedPwCorrect);
+        System.out.println("are they same? "+(hashedPwCorrect.equals(hashedPwEntered)));
         // check if the entered password which was hashed matches the correct password hash.
         // same pin will have the same hashes. if the hashes are same, the pw is correct.
         return hashedPwEntered.equals(hashedPwCorrect);
@@ -120,7 +122,7 @@ public class BankServiceImpl implements BankService {
         } else {
             // Check if the password entered is correct or not.
             if (isPasswordCorrect(payerUpiID, requestInfo.getEncryptedPassword())) {
-
+                System.out.println("Bank : The entered password is correct");
                 float amountToPay = Float.parseFloat(requestInfo.getAmountToTransfer());
                 float payerAccountBalance = Float.parseFloat(payerAccountInfo.getBalance());
                 float payeeAccountBalance = Float.parseFloat(payeeAccountInfo.getBalance());

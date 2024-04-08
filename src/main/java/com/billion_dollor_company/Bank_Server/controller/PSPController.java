@@ -35,7 +35,7 @@ public class PSPController {
     public ResponseEntity<AccountBasicDTO> getUserInfo(@Valid @RequestBody AccountBasicDTO request, BindingResult errors) {
         System.out.println("here");
         // to handle errors in the request sent from client.
-        if(errors.hasErrors())
+        if (errors.hasErrors())
             throw new AccountBasicRequestException(errors);
 
         AccountBasicDTO userInfo = pspService.getAccountInfo(request);
@@ -45,7 +45,7 @@ public class PSPController {
     @PostMapping("/checkBalance")
     public ResponseEntity<BalanceResDTO> getAccountBalance(@Valid @RequestBody BalanceReqDTO request, BindingResult errors) {
 
-        if(errors.hasErrors())
+        if (errors.hasErrors())
             throw new AccountBasicRequestException(errors);
 
         BalanceResDTO responseInfo = pspService.getAccountBalance(request);
@@ -61,10 +61,14 @@ public class PSPController {
     @PostMapping("/transaction")
     public ResponseEntity<TransactionResDTO> initiateTransaction(@Valid @RequestBody TransactionReqDTO request, BindingResult errors) {
 
-        if(errors.hasErrors())
+        System.out.println("PSP : The request for initiateTransaction is " + request + " \n");
+        if (errors.hasErrors()) {
+            System.out.println("PSP : An error was present in the request of initiateTransaction.");
             throw new TransactionRequestException(errors);
-
+        }
         TransactionResDTO responseInfo = pspService.initiateTransaction(request);
+
+        System.out.println("PSP : The response being sent back is: " + responseInfo);
 
         // Check if the transaction status was SUCCESS or FAILED. if failed then send 400 Bad Request otherwise 200 OK.
         if (responseInfo.getStatus().equals(Constants.Status.FAILED)) {

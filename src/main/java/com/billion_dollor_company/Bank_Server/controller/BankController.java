@@ -30,6 +30,7 @@ public class BankController {
     @PostMapping("/transaction")
     public ResponseEntity<TransactionResDTO> initiateTransaction(@RequestBody TransactionReqDTO request) {
         // from the service only successful transaction response reaches till here. so no need for exception handling
+        System.out.println("Bank : The request for initiateTransaction is " + request + " \n");
         return ResponseEntity.ok(bankService.initiateTransaction(request));
     }
 }
