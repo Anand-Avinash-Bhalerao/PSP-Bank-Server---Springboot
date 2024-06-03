@@ -15,11 +15,11 @@ public class TransactionReqDTO {
     @NotNull(message = "The payee upiID field cannot be empty")
     private String payeeUpiID;
 
-    @NotNull(message = "The payee account no field cannot be empty")
-    private String payeeAccountNo;
+    @NotNull(message = "The payer account no field cannot be empty")
+    private String payerAccountNo;
 
-    @NotNull(message = "The payee bank name field cannot be empty")
-    private String payeeBankName;
+    @NotNull(message = "The payer bank name field cannot be empty")
+    private String payerBankName;
 
     @NotNull(message = "The amount to transfer field cannot be empty")
     private String amountToTransfer;

@@ -1,10 +1,16 @@
 package com.billion_dollor_company.Bank_Server.service.impl;
 
 import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.DataNotFoundException;
+import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.TransactionFailedException;
+import com.billion_dollor_company.Bank_Server.exceptions.customExceptions.TransactionRequestException;
 import com.billion_dollor_company.Bank_Server.payloads.AccountBasicDTO;
 import com.billion_dollor_company.Bank_Server.models.projections.AccountBasicProjection;
 import com.billion_dollor_company.Bank_Server.payloads.checkBalance.BalanceReqDTO;
 import com.billion_dollor_company.Bank_Server.payloads.checkBalance.BalanceResDTO;
+import com.billion_dollor_company.Bank_Server.payloads.fetchKeys.FetchKeysReqDTO;
+import com.billion_dollor_company.Bank_Server.payloads.fetchKeys.FetchKeysResDTO;
+import com.billion_dollor_company.Bank_Server.payloads.registration.RegistrationReqDTO;
+import com.billion_dollor_company.Bank_Server.payloads.registration.RegistrationResDTO;
 import com.billion_dollor_company.Bank_Server.payloads.transaction.TransactionReqDTO;
 import com.billion_dollor_company.Bank_Server.payloads.transaction.TransactionResDTO;
 import com.billion_dollor_company.Bank_Server.repository.AccountInfoRepository;
@@ -43,9 +49,24 @@ public class PSPServiceImpl implements PSPService {
     }
 
     @Override
+    public RegistrationResDTO register(RegistrationReqDTO infoRequest) {
+        return npciApiService.register(infoRequest);
+    }
+
+    @Override
+    public FetchKeysResDTO fetchKeys() {
+        return npciApiService.fetchKeys();
+    }
+
+    @Override
     public TransactionResDTO initiateTransaction(TransactionReqDTO requestInfo) {
+        if(requestInfo.getPayeeUpiID().equals(requestInfo.getPayerUpiID())){
+            throw new DataNotFoundException("Payer is same as Payee");
+        }
         return npciApiService.initiateTransaction(requestInfo);
     }
+
+
 
 
 }

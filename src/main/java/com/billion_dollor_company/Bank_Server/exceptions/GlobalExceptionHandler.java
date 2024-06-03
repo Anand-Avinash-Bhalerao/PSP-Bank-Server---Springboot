@@ -47,6 +47,7 @@ public class GlobalExceptionHandler {
                 .body(responseInfo);
     }
 
+
     @ExceptionHandler(CheckBalanceFailedException.class)
     public ResponseEntity<BalanceResDTO> transactionFailedException(CheckBalanceFailedException exception) {
         String message = exception.getMessage();

@@ -21,6 +21,20 @@ public class Constants {
         public static final String FAILED = "Failed";
     }
 
+    public static class MessagePrinter {
+        public static class Server {
+            public static final String PSP = "PSP";
+            public static final String BANK = "BANK";
+        }
+        public static class MethodType {
+            public static final String AccountInfo = "AccountInfo";
+            public static final String InitiateTransaction = "InitiateTransaction";
+            public static final String Registration = "Registration";
+            public static final String FetchKeys = "FetchKeys";
+            public static final String CheckBalance = "CheckBalance";
+        }
+    }
+
     public static class Messages {
         public static final String NO_PAYER_ACCOUNT_FOUND = "No payer Account found";
         public static final String NO_PAYEE_ACCOUNT_FOUND = "No payee Account found";
@@ -40,6 +54,8 @@ public class Constants {
             private static final String BASE_URL = "http://localhost:" + NPCI_SERVER_PORT + "/npci";
             private static final String START_TRANSACTION = "/transaction";
             private static final String CHECK_BALANCE = "/checkBalance";
+            private static final String REGISTRATION = "/registration";
+            private static final String FETCH_KEYS = "/fetchKeys";
 
             public static String getTransactionURL() {
                 return BASE_URL + START_TRANSACTION;
@@ -48,6 +64,15 @@ public class Constants {
             public static String getAccountBalanceURL() {
                 return BASE_URL + CHECK_BALANCE;
             }
+
+            public static String getRegistrationURL(){
+                return BASE_URL + REGISTRATION;
+            }
+            public static String getFetchKeysURL(){
+                return BASE_URL + FETCH_KEYS;
+            }
+
+
         }
     }
 }

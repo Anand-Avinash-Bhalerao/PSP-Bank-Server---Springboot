@@ -47,6 +47,7 @@ public class BankServiceImpl implements BankService {
 
         // This is the actual password which was entered. (Example: 123456)
         String pwEntered = getDecryptedPassword(encryptedPassword);
+        System.out.println("Decrypted password at the bank is : " + pwEntered);
 
         // The pwEntered is a regular string but the correct passwords are stored in the DB by hashing them with SHA 256. We need to hash the entered password.
         String hashedPwEntered = databasePWHashService.getHashedPassword(pwEntered);

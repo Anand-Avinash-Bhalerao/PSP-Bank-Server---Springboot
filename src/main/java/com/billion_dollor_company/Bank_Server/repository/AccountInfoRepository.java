@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-    public interface AccountInfoRepository extends JpaRepository<AccountInfo, String> {
+public interface AccountInfoRepository extends JpaRepository<AccountInfo, String> {
 
     // This fetches only the required fields from the database.
     @Query("SELECT a.upiID as upiID, a.firstName as firstName, a.middleName as middleName, a.lastName as lastName, a.mobileNo as mobileNo FROM AccountInfo a WHERE a.upiID = :upiID")
@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
     // It returns an int which indicates how many rows were affected.
     @Transactional
     @Modifying
-    @Query("update AccountInfo a set a.balance = :balance where a.upiID = :upiID")
+    @Query(value = "update AccountInfo a set a.balance = :balance where a.upiID = :upiID")
     int updateBalance(@Param("balance") String balance, @Param("upiID") String upiID);
 
 }
