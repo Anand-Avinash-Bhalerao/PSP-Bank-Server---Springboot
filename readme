@@ -1,4 +1,4 @@
-This is part of the NPCI Upi System Project.
+This is part of the NPCI Upi Simulator Project.
 This is the PSP/Bank Server.
 It contains both PSP and Bank. but both having separate controllors.
 PSP is the only one in contact with the app.
